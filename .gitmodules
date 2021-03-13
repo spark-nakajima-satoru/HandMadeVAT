@@ -1,0 +1,3 @@
+[submodule "SideFXLabs"]
+	path = SideFXLabs
+	url = https://github.com/sideeffects/SideFXLabs
