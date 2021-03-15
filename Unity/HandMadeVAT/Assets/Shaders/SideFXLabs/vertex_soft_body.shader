@@ -13,6 +13,7 @@ Shader "sidefx/vertex_soft_body_shader" {
 		[MaterialToggle] _pack_normal ("Pack Normal", Float) = 0
 		_posTex ("Position Map (RGB)", 2D) = "white" {}
 		_nTex ("Normal Map (RGB)", 2D) = "grey" {}
+		[MaterialToggle] _useUE4Coord ("Use UE4 Coordinate", Float) = 0.0
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -33,6 +34,7 @@ Shader "sidefx/vertex_soft_body_shader" {
 		uniform float _boundingMin;
 		uniform float _speed;
 		uniform int _numOfFrames;
+		uniform float _useUE4Coord;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -64,8 +66,16 @@ Shader "sidefx/vertex_soft_body_shader" {
 			float expand = _boundingMax - _boundingMin;
 			texturePos.xyz *= expand;
 			texturePos.xyz += _boundingMin;
-			//texturePos.x *= -1;  //flipped to account for right-handedness of unity
-			v.vertex.xyz += texturePos.xyz;  //swizzle y and z because textures are exported with z-up
+			if(_useUE4Coord == 1.0)
+			{
+				texturePos.x *= -1;  //flipped to account for right-handedness of unity
+				v.vertex.xyz += texturePos.xzy;  //swizzle y and z because textures are exported with z-up
+			}
+			else
+			{
+				//texturePos.x *= -1;  //flipped to account for right-handedness of unity
+				v.vertex.xyz += texturePos.xyz;  //swizzle y and z because textures are exported with z-up
+			}
 
 			//calculate normal
 			if (_pack_normal){
@@ -83,14 +93,23 @@ Shader "sidefx/vertex_soft_body_shader" {
 				f3.xy = sqrt(1 - (f2dot/4.0)) * f2;
 				f3.z = 1 - (f2dot/2.0);
 				f3 = clamp(f3, -1.0, 1.0);
-				//f3 = f3.xzy;
-				//f3.x *= -1;
+				if(_useUE4Coord == 1.0)
+				{
+					f3 = f3.xzy;
+					f3.x *= -1;
+				}
 				v.normal = f3;
 			} else {
-				// textureN = textureN.xzy;
+				if(_useUE4Coord == 1.0)
+				{
+					textureN = textureN.xzy;
+				}
 				textureN *= 2;
 				textureN -= 1;
-				// textureN.x *= -1; 
+				if(_useUE4Coord == 1.0)
+				{
+					textureN.x *= -1;
+				}
 				v.normal = textureN;
 			}
 		}

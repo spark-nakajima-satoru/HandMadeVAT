@@ -15,6 +15,7 @@ Shader "sidefx/vertex_sprite_shader" {
 		[MaterialToggle] _pack_normal ("Pack Normal", Float) = 0
 		_posTex ("Position Map (RGB)", 2D) = "white" {}
 		_colorTex ("Colour Map (RGB)", 2D) = "white" {}
+		[MaterialToggle] _useUE4Coord ("Use UE4 Coordinate", Float) = 0.0
 	}
 	SubShader {
 		Tags { "Queue"="Transparent" "RenderType"="Opaque" }
@@ -38,6 +39,7 @@ Shader "sidefx/vertex_sprite_shader" {
 		uniform float _height;
 		uniform float _width;
 		uniform int _numOfFrames;
+		uniform float _useUE4Coord;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -64,13 +66,16 @@ Shader "sidefx/vertex_sprite_shader" {
 			float4 texturePos = tex2Dlod(_posTex,float4(v.texcoord1.x, (timeInFrames + v.texcoord1.y), 0, 0));
 			float3 textureCd = tex2Dlod(_colorTex,float4(v.texcoord1.x, (timeInFrames + v.texcoord1.y), 0, 0));
 			//comment out the line below if your colour space is set to linear
-			texturePos.xyz = pow(texturePos.xyz, 2.2)
+			texturePos.xyz = pow(texturePos.xyz, 2.2);
 
 			//expand normalised position texture values to world space
 			float expand = _boundingMax - _boundingMin;
 			texturePos.xyz *= expand;
 			texturePos.xyz += _boundingMin;
-			// texturePos.x *= -1;  //flipped to account for right-handedness of unity
+			if(_useUE4Coord == 1.0) {
+				texturePos.x *= -1;  //flipped to account for right-handedness of unity
+				texturePos.xyz = texturePos.xzy;  //swizzle y and z because textures are exported with z-up
+			}
 
 			//create camera facing billboard based on uv coordinates
 			float3 cameraF = float3(v.texcoord.x - 0.5, v.texcoord.y - 0.5, 0);
