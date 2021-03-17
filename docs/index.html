@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>icon image renderer</title>
+</head>
+<body>
+    <div id="genwrap">
+        <h1>Sprite VAT generator</h1>
+        <section id="vatconf">
+            <div>
+                <label for="numsprts">Number of sprites</label>
+                <input id="numsprts" type="number" min="1" step="1" value="1">
+            </div>
+            <div>
+                <label for="numfrms">Number of frames</label>
+                <input id="numfrms" type="number" min="1" step="1" value="60">
+            </div>
+        </section>
+        <section id="meshgen">
+            <button id="meshgenbtn" type="button">Save Mesh</button>
+        </section>
+        <section id="texgen">
+            <div>
+                <label for="possrc">Positin script</label><br>
+                <textarea id="possrc" rows="10" cols="80">
+function() {
+
+}
+                </textarea><br>
+                <button id="possrcbtn" type="button">Save Position texture</button>
+                <div>
+                    <label for="bndmin">Bounding Min</label>
+                    <input id="bndmin" type="number" value="0">
+                    <br>
+                    <label for="bndmax">Bounding Max</label>
+                    <input id="bndmax" type="number" value="0">
+                </div>
+            </div>
+            
+            <div>
+                <label for="colsrc">Color script</label><br>
+                <textarea id="colsrc" rows="10" cols="80">
+function() {
+
+}
+                </textarea><br>
+                <button id="colsrcbtn" type="button">Save Color texture</button>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
