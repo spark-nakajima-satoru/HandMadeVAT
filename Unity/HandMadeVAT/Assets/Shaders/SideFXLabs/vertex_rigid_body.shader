@@ -16,6 +16,7 @@ Shader "sidefx/vertex_rigid_body_shader" {
 		_posTex ("Position Map (RGB)", 2D) = "white" {}
 		_rotTex ("Rotation Map (RGB)", 2D) = "grey" {}
 		[MaterialToggle] _useUE4Coord ("Use UE4 Coordinate", Float) = 0.0
+		[MaterialToggle] _forceUnGamma ("Force Un Gamma", Float) = 1.0
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -40,6 +41,7 @@ Shader "sidefx/vertex_rigid_body_shader" {
 		uniform float _speed;
 		uniform float _timeoffset;
 		uniform float _useUE4Coord;
+		uniform float _forceUnGamma;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -66,8 +68,11 @@ Shader "sidefx/vertex_rigid_body_shader" {
 			float3 texturePos = tex2Dlod(_posTex,float4(v.texcoord1.x, (1 - timeInFrames) + v.texcoord1.y, 0, 0));
 			float4 textureRot = tex2Dlod(_rotTex,float4(v.texcoord1.x, (1 - timeInFrames) + v.texcoord1.y, 0, 0));
 			//comment out the 2 lines below if your colour space is set to linear
-			texturePos.xyz = pow(texturePos.xyz, 2.2);
-			textureRot.xyz = pow(textureRot.xyz, 2.2);
+			if(_forceUnGamma == 1.0)
+			{
+				texturePos.xyz = pow(texturePos.xyz, 2.2);
+				textureRot.xyz = pow(textureRot.xyz, 2.2);
+			}
 
 			//expand normalised position texture values to world space
 			float expand1 = _boundingMax1 - _boundingMin1;

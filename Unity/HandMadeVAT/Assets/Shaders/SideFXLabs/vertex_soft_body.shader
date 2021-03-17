@@ -14,6 +14,7 @@ Shader "sidefx/vertex_soft_body_shader" {
 		_posTex ("Position Map (RGB)", 2D) = "white" {}
 		_nTex ("Normal Map (RGB)", 2D) = "grey" {}
 		[MaterialToggle] _useUE4Coord ("Use UE4 Coordinate", Float) = 0.0
+		[MaterialToggle] _forceUnGamma ("Force Un Gamma", Float) = 1.0
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -35,6 +36,7 @@ Shader "sidefx/vertex_soft_body_shader" {
 		uniform float _speed;
 		uniform int _numOfFrames;
 		uniform float _useUE4Coord;
+		uniform float _forceUnGamma;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -60,7 +62,10 @@ Shader "sidefx/vertex_soft_body_shader" {
 			float4 texturePos = tex2Dlod(_posTex,float4(v.texcoord1.x, (timeInFrames + v.texcoord1.y), 0, 0));
 			float3 textureN = tex2Dlod(_nTex,float4(v.texcoord1.x, (timeInFrames + v.texcoord1.y), 0, 0));
 			//comment out the line below if your colour space is set to linear
-			texturePos.xyz = pow(texturePos.xyz, 2.2);
+			if(_forceUnGamma == 1.0)
+			{
+				texturePos.xyz = pow(texturePos.xyz, 2.2);
+			}
 
 			//expand normalised position texture values to world space
 			float expand = _boundingMax - _boundingMin;
