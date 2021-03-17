@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <unit name="meter" meter="1"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  
+  <library_geometries>
+    <geometry id="vat-geometry" name="vatgeom">
+      <mesh>
+
+        <!-- 頂点データ
+        スプライトは4つの頂点をもつ四角形
+        最適化で融合されてしまったりしないよう重ならないように適当に配置
+         -->
+        <source id="vat-positions">
+          <float_array id="vat-positions-array" count="36">
+            -1 -1 0
+             1 -1 0
+             1  1 0
+            -1  1 0
+            
+            -1 -1 1
+             1 -1 1
+             1  1 1
+            -1  1 1
+            
+            -1 -1 2
+             1 -1 2
+             1  1 2
+            -1  1 2
+          </float_array>
+          <technique_common>
+            <accessor source="#vat-positions-array" count="12" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        
+        <!-- UV1:スプライトごとのUV
+        スプライトの各頂点に割り当てたUV
+         -->
+        <source id="vat-uvs1">
+          <float_array id="vat-uvs1-array" count="24">
+            0 0
+            1 0
+            1 1
+            0 1
+            
+            0 0
+            1 0
+            1 1
+            0 1
+            
+            0 0
+            1 0
+            1 1
+            0 1
+          </float_array>
+          <technique_common>
+            <accessor source="#vat-uvs1-array" count="12" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        
+        <!-- UV2:スプライトごとのVATテクスチャの最初のフレームのテクセルの位置
+        基本的な算出法
+        スプライトに0から順に割り当てた番号をIDとするとN個のスプライトのIDは0からN-1になる
+        ("スプライトのID"であって、"頂点のID"ではないので注意)
+        またVATテクスチャのサイズが幅W、高さHとすると
+        u = ((ID % W) + 0.5) / W
+        v = 1.0 - (floor(ID / W) + 0.5) / H
+        になる
+         -->
+        <source id="vat-uvs2">
+          <float_array id="vat-uvs2-array" count="24">
+            0.125 0.944444
+            0.125 0.944444
+            0.125 0.944444
+            0.125 0.944444
+            
+            0.375 0.944444
+            0.375 0.944444
+            0.375 0.944444
+            0.375 0.944444
+            
+            0.625 0.944444
+            0.625 0.944444
+            0.625 0.944444
+            0.625 0.944444
+          </float_array>
+          <technique_common>
+            <accessor source="#vat-uvs2-array" count="12" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+
+        <!-- 頂点データの指定 -->
+        <vertices id="vat-vertices">
+          <input semantic="POSITION" source="#vat-positions"/>
+        </vertices>
+
+        <!-- 三角形のリスト
+        スプライトは四角形なので1つあたり三角形2つ
+         -->
+        <triangles count="6">
+          <input semantic="VERTEX" source="#vat-vertices" offset="0"/>
+          <input semantic="TEXCOORD" source="#vat-uvs1" offset="0" set="0"/>
+          <input semantic="TEXCOORD" source="#vat-uvs2" offset="0" set="1"/>
+          <p>
+            0 1 2
+            2 3 0
+            
+            4 5 6
+            6 7 4
+            
+            8 9 10
+            10 11 8
+          </p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+
+  <library_visual_scenes>
+    <visual_scene id="vat-scene" name="vatscene">
+      <node id="vat-mesh" name="vatmesh" type="NODE">
+        <matrix sid="transform">
+          1 0 0 0
+          0 1 0 0
+          0 0 1 0
+          0 0 0 1
+        </matrix>
+        <instance_geometry url="#vat-geometry" name="vatmeshgeom"/>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+
+  <scene>
+    <instance_visual_scene url="#vat-scene"/>
+  </scene>
+</COLLADA>
