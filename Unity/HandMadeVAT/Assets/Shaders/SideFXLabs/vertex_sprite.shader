@@ -15,8 +15,12 @@ Shader "sidefx/vertex_sprite_shader" {
 		[MaterialToggle] _pack_normal ("Pack Normal", Float) = 0
 		_posTex ("Position Map (RGB)", 2D) = "white" {}
 		_colorTex ("Colour Map (RGB)", 2D) = "white" {}
+		[MaterialToggle] _useColorAsEmission ("Use Color Texture as Emission", Float) = 0.0
 		[MaterialToggle] _useUE4Coord ("Use UE4 Coordinate", Float) = 0.0
 		[MaterialToggle] _forceUnGamma ("Force Un Gamma", Float) = 1.0
+		
+		[MaterialToggle] _useDebugTime ("Use Debug Time", Float) = 0.0
+		_debugTime ("Debug Time", Range(0, 1)) = 0
 	}
 	SubShader {
 		Tags { "Queue"="Transparent" "RenderType"="Opaque" }
@@ -40,9 +44,13 @@ Shader "sidefx/vertex_sprite_shader" {
 		uniform float _height;
 		uniform float _width;
 		uniform int _numOfFrames;
+		uniform float _useColorAsEmission;
 		uniform float _useUE4Coord;
 		uniform float _forceUnGamma;
 
+		uniform float _useDebugTime;
+		uniform float _debugTime;
+		
 		struct Input {
 			float2 uv_MainTex;
 			float4 vcolor : COLOR ;
@@ -62,7 +70,8 @@ Shader "sidefx/vertex_sprite_shader" {
 		//vertex function
 		void vert(inout appdata_full v){
 			//calculate uv coordinates
-			float timeInFrames = ((ceil(frac(-_Time.y * _speed) * _numOfFrames))/_numOfFrames) + (1.0/_numOfFrames);
+			float currentTime = (_useDebugTime == 0.0) ? frac(-_Time.y * _speed) : (1.0 - _debugTime);
+			float timeInFrames = ((ceil(currentTime * _numOfFrames))/_numOfFrames) + (1.0/_numOfFrames);
 
 			//get position and colour from textures
 			float4 texturePos = tex2Dlod(_posTex,float4(v.texcoord1.x, (timeInFrames + v.texcoord1.y), 0, 0));
@@ -97,7 +106,12 @@ Shader "sidefx/vertex_sprite_shader" {
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = c.rgb * IN.vcolor.rgb; //multiply existing albedo map by vertex colour 
+			if(_useColorAsEmission < 1.0) {
+				o.Albedo = c.rgb * IN.vcolor.rgb; //multiply existing albedo map by vertex colour 
+			} else {
+				o.Albedo = float3(0.0, 0.0, 0.0);
+				o.Emission = c.rgb * IN.vcolor.rgb;
+			}
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;

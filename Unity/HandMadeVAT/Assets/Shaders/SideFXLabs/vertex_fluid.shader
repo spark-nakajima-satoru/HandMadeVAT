@@ -18,6 +18,9 @@ Shader "sidefx/vertex_fluid_shader" {
 		_colorTex ("Colour Map (RGB)", 2D) = "white" {}
 		[MaterialToggle] _useUE4Coord ("Use UE4 Coordinate", Float) = 0.0
 		[MaterialToggle] _forceUnGamma ("Force Un Gamma", Float) = 1.0
+		
+		[MaterialToggle] _useDebugTime ("Use Debug Time", Float) = 0.0
+		_debugTime ("Debug Time", Range(0, 1)) = 0
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -44,6 +47,9 @@ Shader "sidefx/vertex_fluid_shader" {
 		uniform float _useUE4Coord;
 		uniform float _forceUnGamma;
 
+		uniform float _useDebugTime;
+		uniform float _debugTime;
+
 		struct Input {
 			float2 uv_MainTex;
 			float4 vcolor : COLOR ;
@@ -63,7 +69,8 @@ Shader "sidefx/vertex_fluid_shader" {
 		//vertex function
 		void vert(inout appdata_full v){
 			//calculate uv coordinates
-			float timeInFrames = ((ceil(frac(-_Time.y * _speed) * _numOfFrames))/_numOfFrames) + (1.0/_numOfFrames);
+			float currentTime = (_useDebugTime == 0.0) ? frac(-_Time.y * _speed) : (1.0 - _debugTime);
+			float timeInFrames = ((ceil(currentTime * _numOfFrames))/_numOfFrames) + (1.0/_numOfFrames);
 			
 			//get position, normal and colour from textures
 			float4 texturePos = tex2Dlod(_posTex,float4(v.texcoord.x, (timeInFrames + v.texcoord.y), 0, 0));
