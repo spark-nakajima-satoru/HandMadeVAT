@@ -1,0 +1,21 @@
+[
+    {
+        "Name": "Sprite",
+        "doubleTex": 0,
+        "normData": 1,
+        "numOfFrames": 300,
+        "packNorm": 1,
+        "packPscale": 0,
+        "paddedX": 1.0,
+        "paddedY": 1.0,
+        "pivMax": 0.0,
+        "pivMin": 0.0,
+        "posMax": 48.87791900199937,
+        "posMin": -27.86285392936396,
+        "scaleMax": 1.0,
+        "scaleMin": 1.0,
+        "speed": 1.0,
+        "width": 1.0,
+        "height": 1.0
+    }
+]
