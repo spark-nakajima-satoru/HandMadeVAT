@@ -2,51 +2,97 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>icon image renderer</title>
+    <title>Sprite VAT Generator</title>
+    <script src="vat_generator.js"></script>
 </head>
 <body>
     <div id="genwrap">
         <h1>Sprite VAT generator</h1>
         <section id="vatconf">
+            <h2>User Settings</h2>
+            <table id="userconftbl">
+                <tr>
+                    <td><label for="datprefix">Save Data Prefix</label></td>
+                    <td><input id="datprefix" type="text" value="vat"></td>
+                </tr>
+                <tr>
+                    <td><label for="numsprts">Number of sprites</label></td>
+                    <td><input id="numsprts" type="number" min="1" step="1" value="1"></td>
+                </tr>
+                <tr>
+                    <td><label for="numfrms">Number of frames</label></td>
+                    <td><input id="numfrms" type="number" min="1" step="1" value="60"></td>
+                </tr>
+                <tr>
+                    <td><label for="maxtexw">Max texture width</label></td>
+                    <td><input id="maxtexw" type="number" min="1" step="1" value="1024"></td>
+                </tr>
+            </table>
+        </section>
+        <section id="postexgen">
+            <h2>Position Script</h2>
             <div>
-                <label for="numsprts">Number of sprites</label>
-                <input id="numsprts" type="number" min="1" step="1" value="1">
+                <textarea id="possrc" rows="10" cols="80">// position generate example
+VAT.positionGenerator.compute = function(spriteID, frame) {
+    let p = new VAT.Point(0.0, 0.0, 0.0);
+    p.x = 3.0 - ((frame + 0.5) / VAT.numFrames) * 6.0;    // 0 <= frame < VAT.numFrames
+    p.y = 2.0 - ((spriteID + 0.5) / VAT.numSprites) * 4.0; // 0 <= spriteID < VAT.numSprites
+    p.z = 0.0;
+    return p;
+};
+</textarea>
             </div>
             <div>
-                <label for="numfrms">Number of frames</label>
-                <input id="numfrms" type="number" min="1" step="1" value="60">
-            </div>
-        </section>
-        <section id="meshgen">
-            <button id="meshgenbtn" type="button">Save Mesh</button>
-        </section>
-        <section id="texgen">
-            <div>
-                <label for="possrc">Positin script</label><br>
-                <textarea id="possrc" rows="10" cols="80">
-function() {
-
-}
-                </textarea><br>
                 <button id="possrcbtn" type="button">Save Position texture</button>
-                <div>
-                    <label for="bndmin">Bounding Min</label>
-                    <input id="bndmin" type="number" value="0">
-                    <br>
-                    <label for="bndmax">Bounding Max</label>
-                    <input id="bndmax" type="number" value="0">
-                </div>
             </div>
-            
+        </section>
+        <section id="coltexgen">
+            <h2>Color Script</h2>
             <div>
-                <label for="colsrc">Color script</label><br>
-                <textarea id="colsrc" rows="10" cols="80">
-function() {
-
-}
-                </textarea><br>
+                <textarea id="colsrc" rows="10" cols="80">// color generate example
+VAT.colorGenerator.compute = function(spriteID, frame) {
+    let c = new VAT.Color(1.0, 1.0, 1.0, 1.0);
+    c.r = (frame + 1.0) / VAT.numFrames;    // 0 <= frame < VAT.numFrames
+    c.g = (spriteID + 1.0) / VAT.numSprites; // 0 <= spriteID < VAT.numSprites
+    c.b = 0.0;
+    c.a = 1.0;
+    return c;
+};
+</textarea>
+            </div>
+            <div>
                 <button id="colsrcbtn" type="button">Save Color texture</button>
             </div>
+        </section>
+        <section>
+            <h2>Computed Parameters</h2>
+            <table id="cmpprmstbl">
+                <tr>
+                    <td><label for="texw">Texture Width</label></td>
+                    <td><input id="texw" type="number" value="1" disabled></td>
+                </tr>
+                <tr>
+                    <td><label for="texh">Texture Height</label></td>
+                    <td><input id="texh" type="number" value="-1" disabled></td>
+                </tr>
+                <tr>
+                    <td><label for="bndmin">Bounding Min</label></td>
+                    <td><input id="bndmin" type="number" value="-1" disabled></td>
+                </tr>
+                <tr>
+                    <td><label for="bndmax">Bounding Max</label></td>
+                    <td><input id="bndmax" type="number" value="1" disabled></td>
+                </tr>
+            </table>
+            <button id="datagenbtn" type="button">Save Data JSON</button>
+        </section>
+        <section id="meshgen">
+            <h2>Mesh</h2>
+            <button id="meshgenbtn" type="button">Save Mesh (.dae)</button>
+        </section>
+        <section id="allgen">
+            <h2>Save All</h2>
+            <button id="allgenbtn" type="button">Save All</button>
         </section>
     </div>
 </body>
