@@ -4,6 +4,16 @@
     <meta charset="utf-8">
     <title>Sprite VAT Generator</title>
     <script src="vat_generator.js"></script>
+    <style>
+        .scriptref {
+            background-color: lightgray;
+            font-size: 75%;
+        }
+        section {
+            border-top: 1px solid black;
+            margin-top: 1em;
+        }
+    </style>
 </head>
 <body>
     <div id="genwrap">
@@ -45,6 +55,20 @@ VAT.positionGenerator.compute = function(spriteID, frame) {
             <div>
                 <button id="possrcbtn" type="button">Save Position texture</button>
             </div>
+            <pre class="scriptref">
+//===== position generator について =====
+// VAT.positionGenerator の以下のフィールドを設定してください
+// compute は必須で、init、final はオプションです
+
+// 定義しておくと最初に1回だけ呼ばれるfunction
+VAT.positionGenerator.init = function() {};
+// スプライトごとの各フレームでの位置を返すfunction (必須)
+VAT.positionGenerator.compute = function(spriteID, frame) { return new VAT.Point(); };
+// 定義しておくと最後に1回だけ呼ばれるfunction
+VAT.positionGenerator.final = function() {};
+// フリースペース
+VAT.positionGenerator.temporal = null;
+            </pre>
         </section>
         <section id="coltexgen">
             <h2>Color Script</h2>
@@ -63,6 +87,20 @@ VAT.colorGenerator.compute = function(spriteID, frame) {
             <div>
                 <button id="colsrcbtn" type="button">Save Color texture</button>
             </div>
+            <pre class="scriptref">
+//===== color generator について =====
+// VAT.colorGenerator の以下のフィールドを設定してください
+// compute は必須で、init、final はオプションです
+
+// 定義しておくと最初に1回だけ呼ばれるfunction
+VAT.colorGenerator.init = function() {};
+// スプライトごとの各フレームでの色を返すfunction (必須)
+VAT.colorGenerator.compute = function(spriteID, frame) { return new VAT.Color(); };
+// 定義しておくと最後に1回だけ呼ばれるfunction
+VAT.colorGenerator.final = function() {};
+// フリースペース
+VAT.colorGenerator.temporal = null;
+            </pre>
         </section>
         <section>
             <h2>Computed Parameters</h2>
@@ -92,7 +130,8 @@ VAT.colorGenerator.compute = function(spriteID, frame) {
         </section>
         <section id="allgen">
             <h2>Save All</h2>
-            <button id="allgenbtn" type="button">Save All</button>
+            <p style="font-size:75%;">※上記全てのファイルを連続でダウンロードします。ブラウザによっては複数ファイルのダウンロードの許可を求めるダイアログが出ますので、許可をしてください。</p>
+            <p><button id="allgenbtn" type="button">Save All</button></p>
         </section>
     </div>
 </body>

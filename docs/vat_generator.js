@@ -306,9 +306,15 @@ window.addEventListener('load', ()=>{
         VAT.positionGenerator.final = null;
         VAT.positionGenerator.temporal = null;
 
-        eval(srcText);
+        try {
+            Function('"use strict";return (()=>{' + srcText + '})()')();
+        } catch (e) {
+            alert("positionGenerator script failed to evaluate.\n" + e);
+            console.error(e);
+            return;
+        }
         if(VAT.positionGenerator.compute == null) {
-            alert("positionGenerator eval failed");
+            alert("positionGenerator.compute is not defined.");
             return;
         }
 
@@ -384,9 +390,16 @@ window.addEventListener('load', ()=>{
         VAT.colorGenerator.final = null;
         VAT.colorGenerator.temporal = null;
 
-        eval(srcText);
+        try {
+            // eval(srcText);
+            Function('"use strict";return (()=>{' + srcText + '})()')();
+        } catch (e) {
+            alert("colorGenerator script failed to evaluate.\n" + e);
+            console.error(e);
+            return;
+        }
         if(VAT.colorGenerator.compute == null) {
-            alert("colorGenerator eval failed");
+            alert("colorGenerator.compute is not defined.");
             return;
         }
 

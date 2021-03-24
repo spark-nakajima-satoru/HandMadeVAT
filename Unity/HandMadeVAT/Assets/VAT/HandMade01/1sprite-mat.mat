@@ -80,13 +80,16 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _boundingMax: 5
-    - _boundingMin: -5
+    - _boundingMax: 1
+    - _boundingMin: -1
+    - _debugTime: 0
     - _forceUnGamma: 0
     - _height: 1
     - _numOfFrames: 9
     - _pack_normal: 0
     - _speed: 1
+    - _useColorAsEmission: 0
+    - _useDebugTime: 0
     - _useUE4Coord: 0
     - _width: 1
     m_Colors:

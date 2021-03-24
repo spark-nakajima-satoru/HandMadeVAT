@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: 3sprite-mat
   m_Shader: {fileID: 4800000, guid: 709a4d6437ac11d49927ff57dd4ea418, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _USEDEBUGTIME_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -80,15 +80,18 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _boundingMax: 5
-    - _boundingMin: -5
+    - _boundingMax: 1
+    - _boundingMin: -1
+    - _debugTime: 0.131
     - _forceUnGamma: 0
-    - _height: 1
+    - _height: 0.25
     - _numOfFrames: 9
     - _pack_normal: 0
     - _speed: 1
+    - _useColorAsEmission: 0
+    - _useDebugTime: 1
     - _useUE4Coord: 0
-    - _width: 1
+    - _width: 0.25
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
