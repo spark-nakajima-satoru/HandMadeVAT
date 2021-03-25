@@ -322,13 +322,27 @@ window.addEventListener('load', ()=>{
             VAT.positionGenerator.init();
         }
 
+        let computeFunc = function(isprt, ifrm) {
+            let p = null;
+            try{
+                p = VAT.positionGenerator.compute(isprt, ifrm);
+            } catch(e) {
+                alert("positionGenerator.compute script execution failed.\n" + e);
+                console.error(e);
+                return null;
+            }
+            computeFunc = VAT.positionGenerator.compute;
+            return p;
+        };
+
         let posarray = new Array(VAT.numSprites);
         let minpos = new VAT.Point(Number.MAX_VALUE, Number.MAX_VALUE, Number.MAX_VALUE);
         let maxpos = new VAT.Point(-Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE);
         for(let ifrm = 0; ifrm < VAT.numFrames; ifrm++) {
             posarray[ifrm] = new Array(VAT.numSprites);
             for(let isprt = 0; isprt < VAT.numSprites; isprt++) {
-                const p = VAT.positionGenerator.compute(isprt, ifrm);
+                const p = computeFunc(isprt, ifrm);
+                if(p == null) { return; }
                 posarray[ifrm][isprt] = p;
                 minpos.selectMin(p);
                 maxpos.selectMax(p);
@@ -407,11 +421,25 @@ window.addEventListener('load', ()=>{
             VAT.colorGenerator.init();
         }
 
+        let computeFunc = function(isprt, ifrm) {
+            let p = null;
+            try{
+                p = VAT.colorGenerator.compute(isprt, ifrm);
+            } catch(e) {
+                alert("colorGenerator.compute script execution failed.\n" + e);
+                console.error(e);
+                return null;
+            }
+            computeFunc = VAT.colorGenerator.compute;
+            return p;
+        };
+
         let colarray = new Array(VAT.numSprites);
         for(let ifrm = 0; ifrm < VAT.numFrames; ifrm++) {
             colarray[ifrm] = new Array(VAT.numSprites);
             for(let isprt = 0; isprt < VAT.numSprites; isprt++) {
-                const c = VAT.colorGenerator.compute(isprt, ifrm);
+                const c = computeFunc(isprt, ifrm);
+                if(c == null) { return; }
                 colarray[ifrm][isprt] = c;
             }
         }

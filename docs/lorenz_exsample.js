@@ -3,9 +3,9 @@ VAT.positionGenerator.init = function() {
     let tmpp = new Array(VAT.numSprites);
 	for(let i = 0; i < VAT.numSprites; i++) {
 		let p = new VAT.Point();
-		p.x = (Math.random() * 2.0 - 1.0) * 0.025;
-		p.y = (Math.random() * 2.0 - 1.0) * 0.025;
-		p.z = (Math.random() * 2.0 - 1.0) * 0.025;
+		p.x = (Math.random() * 2.0 - 1.0) * 0.04;
+		p.y = (Math.random() * 2.0 - 1.0) * 0.04;
+		p.z = (Math.random() * 2.0 - 1.0) * 0.04;
 		tmpp[i] = p;
 	}
     VAT.positionGenerator.temporal = { tempp: tmpp };
@@ -30,12 +30,12 @@ VAT.colorGenerator.compute = function(spriteID, frame) {
     let c = new VAT.Color(1.0, 1.0, 1.0, 1.0);
 	const t = frame / (VAT.numFrames - 1);
 	const s = spriteID / (VAT.numSprites - 1);
-	const tr = t * (Math.PI * 2.0 * (1.0 + s * 0.8));
-	const tg = t * (Math.PI * 3.0 * (1.0 + s * 0.7));
-	const tb = t * (Math.PI * 5.0 * (1.0 + s * 0.6));
-    c.r = cos(tr) * 0.5 + 0.5;
-    c.g = cos(tg) * 0.5 + 0.5;
-    c.b = cos(tb) * 0.5 + 0.5;
+	const tr = t * (Math.PI * 2.0 * (1.0 + s * 3.8));
+	const tg = t * (Math.PI * 3.0 * (1.0 + s * 5.7));
+	const tb = t * (Math.PI * 5.0 * (1.0 + s * 7.6));
+    c.r = Math.cos(tr) * 0.3 + 0.7;
+    c.g = Math.cos(tg) * 0.3 + 0.7;
+    c.b = Math.cos(tb) * 0.3 + 0.7;
     c.a = 1.0;
     return c;
 };
