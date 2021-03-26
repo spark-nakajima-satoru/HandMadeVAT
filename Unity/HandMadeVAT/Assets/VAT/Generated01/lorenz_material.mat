@@ -82,8 +82,8 @@ Material:
     - _UVSec: 0
     - _UseDebugTime: 0
     - _ZWrite: 1
-    - _boundingMax: 48.87792
-    - _boundingMin: -27.862854
+    - _boundingMax: 48.882683
+    - _boundingMin: -27.867224
     - _debugTime: 0
     - _forceUnGamma: 0
     - _height: 1
